@@ -1,4 +1,4 @@
-name: Atualizar Ranking CNB Automático
+name: Atualizar Ranking CNB 500 km Automático
 
 on:
   schedule:
