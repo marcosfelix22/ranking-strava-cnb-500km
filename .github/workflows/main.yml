@@ -1,0 +1,36 @@
+name: Atualizar Ranking CNB Automático
+
+on:
+  schedule:
+    - cron: '0 3 * * *' # Roda todo dia às 0h (horário de Brasília)
+  workflow_dispatch: 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v3
+
+      - name: Instalar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Instalar bibliotecas
+        run: pip install requests pandas openpyxl
+
+      - name: Executar robô
+        env:
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+          REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
+        run: python ranking.py
+
+      - name: Salvar planilha atualizada
+        run: |
+          git config --global user.name "Robo CNB"
+          git config --global user.email "bot@github.com"
+          git add Ranking_CNB_500km_2026.xlsx
+          git commit -m "Ranking atualizado" || exit 0
+          git push
