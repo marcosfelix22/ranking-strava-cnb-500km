@@ -1,13 +1,14 @@
-name: Atualizar Ranking CNB 500 km Automático
+name: "Atualizar Ranking CNB 500 km Automático"
 
 on:
   schedule:
     - cron: '59 2 * * *' # Roda todo dia às 23:59h (horário de Brasília)
-  workflow_dispatch: 
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Baixar código
         uses: actions/checkout@v3
@@ -27,10 +28,17 @@ jobs:
           REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
         run: python ranking.py
 
-     - name: Salvar planilha atualizada
+      - name: Salvar planilha atualizada
         run: |
           git config --global user.name "Robo CNB"
           git config --global user.email "bot@github.com"
+          
           git add Ranking_CNB_500km_2026.xlsx
-          git commit -m "Ranking atualizado" || exit 0
-          git push
+          
+          # Garante o commit apenas se houver alterações
+          git diff --quiet && git diff --staged --quiet || git commit -m "Ranking atualizado"
+          
+          # Puxa modificações remotas com rebase antes do push para não dar erro
+          git pull origin main --rebase
+          
+          git push origin main
