@@ -2,7 +2,7 @@ name: "Atualizar Ranking CNB 500 km Automático"
 
 on:
   schedule:
-    - cron: '59 2 * * *' # Roda todo dia às 23:59h (horário de Brasília)
+    - cron: */10 * * * *' # Roda todo dia às 23:59h (horário de Brasília)
   workflow_dispatch:
 
 jobs:
