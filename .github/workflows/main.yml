@@ -2,7 +2,7 @@ name: "Atualizar Ranking CNB 500 km Automático"
 
 on:
   schedule:
-    - cron: '*/10 * * * *' # Roda todo dia às 23:59h (horário de Brasília)
+    - cron: '*/10 * * * *' # Roda a cada 10 minutos
   workflow_dispatch:
 
 jobs:
@@ -11,10 +11,10 @@ jobs:
 
     steps:
       - name: Baixar código
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4 # Atualizado para remover o aviso do Node
 
       - name: Instalar Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5 # Atualizado para remover o aviso do Node
         with:
           python-version: '3.9'
 
